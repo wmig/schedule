@@ -18,7 +18,7 @@ class Scheduler(Scheduler):
             yield
 
     @asyncio.coroutine
-    def run_pending(self):
+    def run_pending(self, delay_seconds=0):
         """
         Run all jobs that are scheduled to run.
 
@@ -32,7 +32,7 @@ class Scheduler(Scheduler):
             try:
                 job = min(job for job in self.jobs if job.should_run)
             except ValueError:
-                yield from asyncio.sleep(0, loop=self.loop)
+                yield from asyncio.sleep(delay_seconds, loop=self.loop)
             else:
                 yield from self._run_job(job)
 
